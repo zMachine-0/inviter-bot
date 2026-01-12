@@ -1,11 +1,13 @@
-require('dotenv').config();
 const { Client, GatewayIntentBits, EmbedBuilder, SlashCommandBuilder, REST, Routes, ButtonBuilder, ButtonStyle, ActionRowBuilder } = require('discord.js');
 
-const TOKEN = process.env.DISCORD_TOKEN;
-const CLIENT_ID = process.env.DISCORD_CLIENT_ID;
+// ============================================
+// CONFIGURATION - PUT YOUR CREDENTIALS HERE
+// ============================================
+const TOKEN = ''; // Put your bot token here between the quotes
+const CLIENT_ID = ''; // Put your client ID here between the quotes
 
 if (!TOKEN || !CLIENT_ID) {
-    console.error('ERROR: Missing DISCORD_TOKEN or DISCORD_CLIENT_ID in .env file');
+    console.error('ERROR: Missing bot token or client ID. Please set them above.');
     process.exit(1);
 }
 
