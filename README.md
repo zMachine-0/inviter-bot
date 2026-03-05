@@ -286,7 +286,7 @@ The bot needs:
 ├ bot.js
 ├ invitedata.json
 ├ guild_invites.json
-└package.json
+└ package.json
 ```
 
 ---
