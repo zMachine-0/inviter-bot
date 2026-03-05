@@ -282,17 +282,11 @@ The bot needs:
 ---
 
 # Project Structure
-
-Example layout:
-
 ```
-invite-tracker-bot
-│
 ├ bot.js
 ├ invitedata.json
 ├ guild_invites.json
-├ package.json
-└ README.md
+└package.json
 ```
 
 ---
@@ -312,13 +306,9 @@ The bot is optimized to be lightweight:
 
 Never commit your bot token.
 
-Use environment variables if hosting publicly.
 
 ---
 
-# License
-
-MIT License
 
 ---
 
