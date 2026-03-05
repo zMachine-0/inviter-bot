@@ -251,9 +251,12 @@ const BOT_OWNER_IDS = ['YOUR_USER_ID'];
 
 In the Discord Developer Portal enable:
 
-* Server Members Intent
-* Message Content Intent
-* Guild Invites Intent
+* View Channels
+* Send Messages
+* Embed Links
+* Read Message History
+* Manage Server
+* Create Instant Invite
 
 ---
 
