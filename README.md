@@ -304,9 +304,11 @@ The bot is optimized to be lightweight:
 
 # Security Notes
 
+Never commit your bot token.
+
 ```
 
-MIT License
+# MIT License
 
 Copyright (c) 2026 zMachine-0
 
@@ -321,7 +323,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND.
 ```
 
 
-Never commit your bot token.
+
 
 
 ---
