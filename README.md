@@ -310,8 +310,6 @@ Never commit your bot token.
 ---
 
 
----
-
 # Contributing
 
 Pull requests are welcome.
