@@ -1,25 +1,25 @@
 # Discord Invite Tracker Bot
 
 A lightweight **Discord invite tracking bot** built with **discord.js v14**.
-Tracks who invited members, handles rejoins/leaves, shows leaderboards, and logs invite activity.
+Tracks who invited members, handles rejoins and leaves, shows leaderboards, and logs invite activity.
 
-This bot stores invite data locally using JSON files and works across multiple guilds.
+Stores all invite data locally in JSON files and works across multiple guilds.
 
 ---
 
 # Features
 
 * Accurate invite tracking using Discord invite cache comparison
-* Invite leaderboards
-* Invite breakdown statistics
-* Rejoin / leave tracking
+* Invite leaderboard
+* Detailed invite breakdown statistics
+* Rejoin and leave tracking
 * Vanity URL detection
 * Invite event logging
 * Admin invite management
 * Owner-only guild management panel
 * Command cooldown system
 * JSON-based persistent storage
-* Invite panel system
+* Invite panel embeds
 
 ---
 
@@ -33,13 +33,13 @@ Shows invite count for a user.
 
 Optional parameter:
 
-* `user` – view another user's invites
+* `user` – view another user's invites instead of your own
 
 Displays:
 
-* current invites
-* total joined
-* total left
+* current invite count
+* total members joined
+* total members left
 * rejoin count
 
 ---
@@ -50,13 +50,13 @@ Shows who invited a specific member.
 
 Parameter:
 
-* `member`
+* `member` – the member to look up
 
 ---
 
 ### `/invitebreakdown`
 
-Shows detailed invite statistics.
+Shows a detailed invite breakdown for a user.
 
 Includes:
 
@@ -70,36 +70,36 @@ Includes:
 
 ### `/inviteleaderboard`
 
-Displays the **top inviters in the server**.
+Shows the **top 10 inviters** in the server.
 
-Shows:
+Displays for each user:
 
 * invite count
-* joins
-* leaves
-* rejoins
+* total joins
+* total leaves
+* rejoin count
 
 ---
 
 ### `/vanitycheck`
 
-Checks if the server has a **vanity invite URL**.
+Checks whether the server has a vanity invite URL and shows it if it does.
 
 ---
 
 ### `/ping`
 
-Shows bot latency.
+Shows the bot's current WebSocket latency.
 
 ---
 
-# Admin Commands
+## Admin Commands
 
 Requires **Administrator permission**.
 
 ### `/invitelogs`
 
-Sets a channel for invite event logs.
+Sets a channel to log invite events in.
 
 Example:
 
@@ -111,115 +111,130 @@ Example:
 
 ### `/resetallinvites`
 
-Deletes **all invite data for the server**.
+Wipes **all invite data** for the server. Asks for confirmation before proceeding.
 
 ---
 
 ### `/resetinvites`
 
-Resets invites for a specific user.
+Resets invite data for a specific user.
+
+Parameter:
+
+* `user` – the user to reset
 
 ---
 
 ### `/addinvites`
 
-Adds invites to a user.
+Manually adds invites to a user.
 
 Example:
 
 ```
-/addinvites user:@user amount:5
+/addinvites user:@User amount:5
 ```
 
 ---
 
 ### `/removeinvites`
 
-Removes invites from a user.
+Manually removes invites from a user.
+
+Example:
+
+```
+/removeinvites user:@User amount:3
+```
 
 ---
 
 ### `/exportinvites`
 
-Exports all invite data.
+Exports all invite data for the server in CSV format.
 
 ---
 
 ### `/invitespanel`
 
-Creates an invite panel message in a channel.
+Sends an invite panel embed to a channel. Members can click a button to check their own invite count.
+
+Parameter:
+
+* `channel` – the channel to send the panel to
 
 ---
 
-# Owner Commands
+## Owner Commands
 
-These commands are restricted to **BOT_OWNER_IDS**.
+Restricted to user IDs listed in `BOT_OWNER_IDS`.
 
 ### `/botguilds`
 
-Shows all guilds the bot is in.
+Shows all guilds the bot is currently in.
 
-Features:
+Includes:
 
-* paginated UI
-* guild information
-* member counts
-* automatic invite link generation
-* cached invite links
-* refresh button
+* guild name and ID
+* member count
+* invite link (auto-generated and cached)
+* pagination buttons
+* refresh button to regenerate invite links
 
 ---
 
 # Invite Logging
 
-When enabled, the bot logs events such as:
+When a log channel is set via `/invitelogs`, the bot will post an embed for every tracked event.
 
-* member joined
-* member left
-* member rejoined
-* inviter information
-* vanity URL joins
+Events logged:
+
+* member joined — shows who invited them
+* member left — shows who originally invited them
+* member rejoined — tracks rejoin count
 
 Example log:
 
 ```
 Member Joined
-User: ExampleUser
+ExampleUser#0000 joined
 Invited by: @User
 ```
+
+Vanity URL joins are also tracked and will show as `Vanity URL` instead of an inviter.
 
 ---
 
 # Data Storage
 
-The bot stores data locally in JSON files.
+All data is saved locally in two JSON files.
 
 ### `invitedata.json`
 
 Stores:
 
-* invite counts
-* user history
-* leave counts
-* log channels
+* invite counts per user
+* member join/leave history
+* who invited who
+* log channel settings
 
 ### `guild_invites.json`
 
-Stores cached server invite links for `/botguilds`.
+Stores cached invite links used by `/botguilds`.
+
+Data is saved automatically every 5 minutes and on bot shutdown.
 
 ---
 
-# Invite Tracking System
+# How Invite Tracking Works
 
-Discord does **not directly provide which invite was used**.
+Discord doesn't tell you which invite a member used when they join. The bot works around this by:
 
-This bot solves it by:
+1. Caching all active invites on startup
+2. Fetching current invite usage when a member joins
+3. Comparing use counts to find which invite was just used
 
-1. Caching all invites on startup
-2. Monitoring invite usage changes
-3. Comparing invite use counts when a member joins
-
-This allows accurate inviter detection.
+This gives accurate inviter detection in most cases. Edge cases like simultaneous joins or deleted invites may result in an unknown inviter.
 
 ---
 
@@ -233,11 +248,11 @@ npm install discord.js
 
 ---
 
-## 2. Configure Bot
+## 2. Configure the Bot
 
-Edit the top of the script:
+Open `index.js` and fill in your details at the top of the file:
 
-```
+```js
 const TOKEN = 'BOT_TOKEN_HERE';
 const CLIENT_ID = 'BOT_CLIENT_ID';
 const BOT_OWNER_IDS = ['YOUR_USER_ID'];
@@ -247,25 +262,26 @@ const BOT_OWNER_IDS = ['YOUR_USER_ID'];
 
 ## 3. Enable Required Intents
 
-Enable these in the Discord Developer Portal:
+In the [Discord Developer Portal](https://discord.com/developers/applications), go to your bot's settings and enable:
 
 * Server Members Intent
 * Message Content Intent
-* Guild Invites Intent
+
+Guild Invites is not a privileged intent and does not need to be toggled manually.
 
 ---
 
-## 4. Run Bot
+## 4. Run the Bot
 
 ```
-node bot.js
+node index.js
 ```
 
 ---
 
 # Required Bot Permissions
 
-The bot needs:
+The bot needs the following permissions in your server:
 
 * View Channels
 * Send Messages
@@ -279,30 +295,21 @@ The bot needs:
 # Project Structure
 
 ```
-inviter-bot
-│
-├ bot.js
-├ invitedata.json
-├ guild_invites.json
-└ package.json
+invite-tracker/
+├── index.js
+├── invitedata.json
+├── guild_invites.json
+└── package.json
 ```
 
 ---
 
-# Performance Notes
+# Notes
 
-The bot is optimized to be lightweight:
-
-* Uses Map caching instead of large objects
-* Saves data asynchronously
-* Automatic periodic saves
-* Minimal memory usage
-
----
-
-# Security Notes
-
-Never commit your bot token.
+* The bot uses in-memory Maps for fast lookups and only writes to disk when data changes or on a 5 minute interval
+* Invite counts will never go below 0
+* The `/resetallinvites` command has a confirmation step to prevent accidental wipes
+* Never commit your bot token — use a `.env` file or environment variables if deploying
 
 ---
 
@@ -312,13 +319,12 @@ MIT License
 
 Copyright (c) 2026 zMachine-0
 
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction.
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED.
 
 ---
 
 # Contributing
 
-Pull requests are welcome.
-You can improve the bot however you like!
+Pull requests are welcome. Feel free to open an issue if you find a bug or want to suggest a feature.
