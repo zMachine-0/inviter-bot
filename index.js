@@ -17,7 +17,7 @@ const client = new Client({
     intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers, GatewayIntentBits.GuildInvites, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent],
     makeCache: () => new Map(),
     sweepers: {
-        messages: { interval: 3600, lifetime: 1800 }
+        messages: { interval: 3600, lifetime: 1800 } 
     }
 });
 
